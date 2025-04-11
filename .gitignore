@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+/client/node_modules/ # If you have a separate client folder
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+.env*.local
+
+# Build output
+dist/
+build/
+
+# IDE config files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Optional files
+.DS_Store
+Thumbs.db
