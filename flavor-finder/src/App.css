@@ -1,0 +1,254 @@
+.App {
+  text-align: center;
+  background-color:  #262525 ;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin: 20px 0;
+}
+
+.App-header {
+  background: linear-gradient(#8d1e2d,#eb5166);
+  padding: 5px;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.swipe-deck {
+  width: 320px;
+  height: 480px;
+  position: relative;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-image {
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 20px;
+  text-align: left;
+}
+
+.card-info h3 {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.card-info p {
+  margin: 0;
+  color: #666;
+}
+
+.button-container {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.no-btn {
+  background-color: #ff4d4d;
+  color: #fff;
+  
+}
+
+.no-btn:hover {
+  background-color: #e04343;
+}
+
+.yes-btn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.yes-btn:hover {
+  background-color: #43a047;
+}
+
+.super-btn {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.super-btn:hover {
+  background-color: #1976d2;
+}
+
+.no-more {
+  text-align: center;
+  color: #ffffff;
+  padding: 20px;
+}
+.nav-menu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.nav-button {
+  background: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-menu a:hover {
+  background: #f0f0f0;
+}
+
+.recipe-page {
+  padding: 20px;
+  width: 90%;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 20px;
+}
+.recipe-grid h4 {
+  margin: 10px;
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+}
+.recipe-box {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  text-align: center;
+}
+
+.recipe-box:hover {
+  transform: scale(1.05);
+}
+
+.recipe-box img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.recipe-detail {
+  padding: 20px;
+  text-align: left;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.recipe-detail img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.recipe-detail-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 90%;
+  margin: 20px auto;
+}
+
+.recipe-detail .left-column {
+  flex: 0 0 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: #fff;
+}
+
+.recipe-detail .left-column h2 {
+  margin-bottom: 10px;
+}
+
+.recipe-detail .left-column img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.recipe-detail .left-column p {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.recipe-detail .right-column {
+  flex: 0 0 35%;
+  background: #fff;
+  color: #333;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
