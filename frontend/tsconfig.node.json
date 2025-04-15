@@ -1,24 +1,32 @@
 {
   "compilerOptions": {
+    // Add incremental flag to allow tsBuildInfoFile
+    "incremental": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    // Target ES2022 as specified
     "target": "ES2022",
-    "lib": ["ES2023"],
+    // Use lowercase 'es2022' for lib, aligning with target
+    "lib": ["es2022"],
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    /* Bundler mode - Changed to Node for compatibility */
+    "moduleResolution": "node", // Changed from "bundler"
+    // "allowImportingTsExtensions": true, // Removed - requires TS 5+ and bundler/custom
     "isolatedModules": true,
     "moduleDetection": "force",
+    // Keep noEmit as this config might be for checking node scripts/configs like vite.config.ts
     "noEmit": true,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noFallthroughCasesInSwitch": true
+    // "noUncheckedSideEffectImports": true // Removed - requires TS 5+
   },
+  // Ensure this points to files relevant to the NODE environment,
+  // like build scripts or config files. Since you aren't actively using
+  // Vite for the build, but have the file, keep it for now.
   "include": ["vite.config.ts"]
 }

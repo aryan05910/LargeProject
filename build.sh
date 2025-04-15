@@ -17,6 +17,6 @@ sudo chown -R bitnami:daemon ~/flavorfindr/frontend/dist
 
 # Set appropriate permissions:
 # Directories need execute permission (755 = rwxr-xr-x)
-sudo find ~/flavorfindr -type d -exec chmod 755 {} \;
+# sudo find ~/flavorfindr -type d -exec chmod 755 {} \;
 # Files need read permission (644 = rw-r--r--)
-sudo find ~/flavorfindr/frontend/dist -type f -exec chmod 644 {}
+# sudo find ~/flavorfindr/frontend/dist -type f -exec chmod 644 {}
