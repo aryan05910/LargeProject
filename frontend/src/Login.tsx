@@ -4,7 +4,7 @@ export default function Login() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [loginResult, setLoginResult] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
+
 
   const handleLogin = async () => {
     try {
@@ -19,7 +19,6 @@ export default function Login() {
       if (data.id >= 0) {
         localStorage.setItem("user", JSON.stringify(data));
         setLoginResult(`Welcome, ${data.firstName}!`);
-        setLoggedIn(true);
         setTimeout(() => {
           window.location.href = "/main";
         }, 1000);
