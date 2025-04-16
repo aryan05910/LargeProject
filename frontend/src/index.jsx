@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import App from './App'; // your recipe swiping app
 import Login from './Login'; // your login page
-import SignUp from './SignUp'; // optional signup page
 import reportWebVitals from './reportWebVitals';
 
 
