@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
+const { getRecommendations } = require('./recommendationModel');
+
 const url = `mongodb+srv://FlavorFindr:WTajjOFaYqBLvyqb@cluster0.ygzkslq.mongodb.net/FlavorFindr?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(url);
 client.connect();
@@ -147,6 +149,36 @@ app.get('/api/getRecipeByID/:id', async (req, res, next) => {
     } catch (err) {
         console.error("Database error fetching recipe by ID:", err);
         res.status(500).json({ error: 'Server error fetching recipe' });
+    }
+});
+
+app.post('/api/getRecommendedRecipes', async (req, res, next) => {
+    // incoming: userId (string/number), favoriteRecipeIds (array of strings)
+    // outgoing: recommendedRecipeIds (array of strings), error (string)
+
+    const { userId, favoriteRecipeIds } = req.body;
+    let error = '';
+    let recommendations = [];
+
+    // Basic input validation
+    if (!userId) {
+        error = 'UserID is required.';
+        return res.status(400).json({ recommendedRecipeIds: [], error: error });
+    }
+    // Ensure favoriteRecipeIds is an array, even if empty or missing
+    const favorites = Array.isArray(favoriteRecipeIds) ? favoriteRecipeIds : [];
+
+    const db = client.db(); // Get database instance
+
+    try {
+        // Call the abstracted model function
+        recommendations = await getRecommendations(userId, favorites, db);
+         res.status(200).json({ recommendedRecipeIds: recommendations, error: '' });
+
+    } catch (err) {
+        console.error(`Error getting recommendations for UserID ${userId}:`, err);
+        error = 'Failed to retrieve recommendations.';
+         res.status(500).json({ recommendedRecipeIds: [], error: error });
     }
 });
 
