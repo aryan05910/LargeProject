@@ -104,7 +104,7 @@ function RecipePage({savedRecipes, favorites }){
     <div className="recipe-page">
       <h2>Your Recipes</h2>
       {favorites.length > 0 && (
-        <section className="favorites-section">i
+        <section className="favorites-section">
           <h3>Favorites</h3>
           <div className="recipe-grid">
             {favorites.map(recipe => (
