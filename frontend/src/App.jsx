@@ -160,8 +160,8 @@ function Navigation() {
       <button className="nav-button" onClick={toggleDropdown}>Navigation</button>
       {showDropdown && (
         <div className="dropdown-menu">
-          <Link to="/" onClick={() => setShowDropdown(false)}>Swipe Page</Link>
-          <Link to="/recipes" onClick={() => setShowDropdown(false)}>Recipe Page</Link>
+          <Link to="/app" onClick={() => setShowDropdown(false)}>Swipe Page</Link>
+          <Link to="app/recipes" onClick={() => setShowDropdown(false)}>Recipe Page</Link>
           <Link to="/logout" onClick={() => { setShowDropdown(false); console.log('Logged out'); }}>Logout</Link>
         </div>
       )}
@@ -183,7 +183,7 @@ function App() {
       </header>
       <Routes>
         <Route 
-          path="/main" 
+          path="/" 
           element={
             <main>
               <SwipePage
@@ -196,9 +196,9 @@ function App() {
             </main>
           } 
         />
-        <Route path="/recipes" element={<RecipePage savedRecipes={savedRecipes} favorites={favorites} />} />
-        <Route path="/recipe/:id" element={<RecipeDetail savedRecipes={savedRecipes} favorites={favorites} />} />
-        <Route path="/logout" element={
+        <Route path="/app/recipes" element={<RecipePage savedRecipes={savedRecipes} favorites={favorites} />} />
+        <Route path="/app/recipe/:id" element={<RecipeDetail savedRecipes={savedRecipes} favorites={favorites} />} />
+        <Route path="logout" element={
           <main style={{ padding: "20px" }}>
             <h2>You have been logged out</h2>
           </main>
