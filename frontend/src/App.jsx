@@ -162,7 +162,7 @@ function Navigation() {
         <div className="dropdown-menu">
           <Link to="/app" onClick={() => setShowDropdown(false)}>Swipe Page</Link>
           <Link to="app/recipes" onClick={() => setShowDropdown(false)}>Recipe Page</Link>
-          <Link to="/logout" onClick={() => { setShowDropdown(false); console.log('Logged out'); }}>Logout</Link>
+          <Link to="/" onClick={() => { setShowDropdown(false); console.log('Logged out'); }}>Logout</Link>
         </div>
       )}
     </div>
