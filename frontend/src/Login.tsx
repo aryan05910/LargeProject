@@ -21,7 +21,7 @@ export default function Login() {
         localStorage.setItem("user", JSON.stringify(data));
         setLoginResult(`Welcome, ${data.firstName}!`);
         setTimeout(() => {
-          navigate("/main");
+          navigate("/app");
         }, 1000);
       } else {
         setLoginResult("Invalid credentials");
