@@ -5,7 +5,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [registerResult, setRegisterResult] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleRegister = async () => {
     try {
@@ -17,17 +17,17 @@ export default function Register() {
 
       const data = await response.json();
 
-      if (response.ok && !data.error) {
-        localStorage.setItem("user", JSON.stringify(data));
-        setRegisterResult("Registration successful!");
+      if (data.success) {
+        setMessage("Registration successful! Redirecting...");
         setTimeout(() => {
-          window.location.href = "/main";
-        }, 1000);
+          window.location.href = "/";
+        }, 1500);
       } else {
-        setRegisterResult(data.error || "Registration failed.");
+        setMessage(data.error || "Registration failed.");
       }
-    } catch (error) {
-      setRegisterResult("Server error. Please try again.");
+    } catch (err) {
+      console.error("Register error:", err);
+      setMessage("Server error. Please try again.");
     }
   };
 
@@ -66,18 +66,18 @@ export default function Register() {
         />
         <button
           onClick={handleRegister}
-          className="btn super-btn"
+          className="btn yes-btn"
           style={{ width: "250px" }}
         >
           Register
         </button>
-        {registerResult && (
-          <p style={{ color: "white", marginTop: "15px" }}>{registerResult}</p>
+        {message && (
+          <p style={{ color: "white", marginTop: "15px" }}>{message}</p>
         )}
         <p style={{ color: "#fff", marginTop: "10px" }}>
           Already have an account?{" "}
-          <a href="/" style={{ color: "#2196f3", textDecoration: "none" }}>
-            Login here
+          <a href="/" style={{ color: "#4caf50", textDecoration: "none" }}>
+            Login
           </a>
         </p>
       </main>
