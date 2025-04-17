@@ -161,7 +161,7 @@ function Navigation() {
       {showDropdown && (
         <div className="dropdown-menu">
           <Link to="/app" onClick={() => setShowDropdown(false)}>Swipe Page</Link>
-          <Link to="app/recipes" onClick={() => setShowDropdown(false)}>Recipe Page</Link>
+          <Link to="/app/recipes" onClick={() => setShowDropdown(false)}>Recipe Page</Link>
           <Link to="/" onClick={() => { setShowDropdown(false); console.log('Logged out'); }}>Logout</Link>
         </div>
       )}
@@ -196,9 +196,9 @@ function App() {
             </main>
           } 
         />
-        <Route path="/app/recipes" element={<RecipePage savedRecipes={savedRecipes} favorites={favorites} />} />
-        <Route path="/app/recipe/:id" element={<RecipeDetail savedRecipes={savedRecipes} favorites={favorites} />} />
-        <Route path="logout" element={
+        <Route path="/recipes" element={<RecipePage savedRecipes={savedRecipes} favorites={favorites} />} />
+        <Route path="/recipe/:id" element={<RecipeDetail savedRecipes={savedRecipes} favorites={favorites} />} />
+        <Route path="/logout" element={
           <main style={{ padding: "20px" }}>
             <h2>You have been logged out</h2>
           </main>
