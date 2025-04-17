@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
 const { getRecommendations } = require('./recommendationModel');
+const path = require('path'); // Import the 'path' module
 
 const url = `mongodb+srv://FlavorFindr:WTajjOFaYqBLvyqb@cluster0.ygzkslq.mongodb.net/FlavorFindr?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(url);
@@ -24,6 +25,9 @@ app.use(bodyParser.json());
 //  );
 //  next();
 //});
+
+// Serve static files from the 'imgs' directory
+app.use('/api/images', express.static(path.join(__dirname, 'db/data/imgs')));
 
 app.listen(5000, '127.0.0.1'); // start Node + Express server on port 5000
 
@@ -181,4 +185,3 @@ app.post('/api/getRecommendedRecipes', async (req, res, next) => {
          res.status(500).json({ recommendedRecipeIds: [], error: error });
     }
 });
-
