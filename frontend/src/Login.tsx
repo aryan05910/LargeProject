@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [loginResult, setLoginResult] = useState("");
-
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -20,7 +21,7 @@ export default function Login() {
         localStorage.setItem("user", JSON.stringify(data));
         setLoginResult(`Welcome, ${data.firstName}!`);
         setTimeout(() => {
-          window.location.href = "/main";
+          navigate("/main");
         }, 1000);
       } else {
         setLoginResult("Invalid credentials");

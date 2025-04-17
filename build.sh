@@ -20,3 +20,6 @@ sudo chown -R bitnami:daemon ~/flavorfindr/frontend/dist
 # sudo find ~/flavorfindr -type d -exec chmod 755 {} \;
 # Files need read permission (644 = rw-r--r--)
 # sudo find ~/flavorfindr/frontend/dist -type f -exec chmod 644 {}
+
+
+sudo /opt/bitnami/ctlscript.sh restart apache

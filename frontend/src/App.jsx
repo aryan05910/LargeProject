@@ -183,7 +183,7 @@ function App() {
       </header>
       <Routes>
         <Route 
-          path="/flavorfindr/main" 
+          path="/main" 
           element={
             <main>
               <SwipePage
