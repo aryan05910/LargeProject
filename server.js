@@ -51,6 +51,40 @@ app.post('/api/login', async (req, res, next) =>
   res.status(200).json(ret);
 });
 
+app.post('/api/register', async (req, res, next) =>
+  {
+    // incoming: login, password, firstName, lastName
+    // outgoing: success, error
+  
+    const { login, password, firstName, lastName } = req.body;
+    const db = client.db();
+  
+    try {
+      // Check if user already exists
+      const existingUser = await db.collection('Users').findOne({ Login: login });
+      if (existingUser) {
+        return res.status(400).json({ success: false, error: 'User already exists' });
+      }
+  
+      const latestUser = await db.collection('Users').find().sort({ UserID: -1 }).limit(1).toArray();
+      const newUserID = latestUser.length > 0 ? latestUser[0].UserID + 1 : 1;
+  
+      // Insert new user
+      const result = await db.collection('Users').insertOne({
+        UserID: newUserID,
+        Login: login,
+        Password: password,
+        Firstname: firstName,
+        Lastname: lastName
+      });
+  
+      res.status(200).json({ success: true, error: '' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ success: false, error: 'Registration failed' });
+    }
+  });
+  
 app.post('/api/searchrecipes', async (req, res, next) =>
 {
   // incoming: userId, search
