@@ -174,33 +174,39 @@ function App() {
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(recipes.length - 1);
+
   return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <h1>Flavor Finder</h1>
-          <Navigation />
-        </header>
-        <Routes>
-          <Route 
-            path="/main" 
-            element={
-              <main>
-                <SwipePage currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} recipes={recipes} setSavedRecipes={setSavedRecipes} setFavorites={setFavorites} />
-              </main>
-            } 
-          />
-          <Route path="/recipes" element={<RecipePage savedRecipes={savedRecipes} favorites={favorites} />} />
-          <Route path="/recipe/:id" element={<RecipeDetail savedRecipes={savedRecipes} favorites={favorites} />} />
-          <Route path="/logout" element={
-            <main style={{ padding: "20px" }}>
-              <h2>You have been logged out</h2>
+    <div className="App">
+      <header className="App-header">
+        <h1>Flavor Finder</h1>
+        <Navigation />
+      </header>
+      <Routes>
+        <Route 
+          path="/flavorfindr/main" 
+          element={
+            <main>
+              <SwipePage
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
+                recipes={recipes}
+                setSavedRecipes={setSavedRecipes}
+                setFavorites={setFavorites}
+              />
             </main>
-          } />
-        </Routes>
-      </div>
-    </Router>
+          } 
+        />
+        <Route path="/recipes" element={<RecipePage savedRecipes={savedRecipes} favorites={favorites} />} />
+        <Route path="/recipe/:id" element={<RecipeDetail savedRecipes={savedRecipes} favorites={favorites} />} />
+        <Route path="/logout" element={
+          <main style={{ padding: "20px" }}>
+            <h2>You have been logged out</h2>
+          </main>
+        } />
+      </Routes>
+    </div>
   );
 }
+
 
 export default App;

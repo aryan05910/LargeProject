@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient, ObjectId } = require('mongodb');
 const url = `mongodb+srv://FlavorFindr:WTajjOFaYqBLvyqb@cluster0.ygzkslq.mongodb.net/FlavorFindr?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(url);
 client.connect();
@@ -106,39 +106,47 @@ app.post('/api/searchrecipes', async (req, res, next) =>
 });
 
 app.get('/api/getRecipeByID/:id', async (req, res, next) => {
-    // incoming: id (from URL path parameter)
-    // outgoing: recipe object OR error
-
     const recipeId = req.params.id;
+    console.log(`--- Received request for ID string: "${recipeId}" ---`); // <-- ADDED LOG
     let mongoObjectId;
 
-    // Validate and convert the incoming string ID to a MongoDB ObjectId
     try {
-        if (!ObjectId.isValid(recipeId)) {
-            return res.status(400).json({ error: 'Invalid Recipe ID format' });
+        console.log(`Validating ID: "${recipeId}"`); // <-- ADDED LOG
+        const isValid = ObjectId.isValid(recipeId); // Store result
+        console.log(`ObjectId.isValid result: ${isValid}`); // <-- ADDED LOG
+
+        if (!isValid) {
+            console.log('Validation failed: ID is not valid.'); // <-- ADDED LOG
+            // Use a slightly different error message to confirm which check failed
+            return res.status(400).json({ error: 'Invalid Recipe ID format (isValid check)' });
         }
+
+        console.log(`Attempting: new ObjectId("${recipeId}")`); // <-- ADDED LOG
         mongoObjectId = new ObjectId(recipeId);
+        console.log(`Successfully created ObjectId: ${mongoObjectId}`); // <-- ADDED LOG
+
     } catch (err) {
-        console.error("Error creating ObjectId:", err);
-        return res.status(400).json({ error: 'Invalid Recipe ID format' });
+        console.error("Error creating ObjectId:", err); // Log the actual error
+         // Use a slightly different error message here too
+        return res.status(400).json({ error: 'Invalid Recipe ID format (catch block)' });
     }
 
-    const db = client.db(); // Use the default DB configured in the connection string if not specified
+    const db = client.db();
 
     try {
         console.log(`Attempting to find recipe with _id: ${mongoObjectId}`);
-        // Find the single recipe document matching the ObjectId
         const recipe = await db.collection('Recipes').findOne({ _id: mongoObjectId });
 
         if (recipe) {
             console.log("Recipe found:", recipe.Title);
-            res.status(200).json(recipe); // Send the full recipe object
+            res.status(200).json(recipe);
         } else {
             console.log(`Recipe not found for _id: ${mongoObjectId}`);
-            res.status(404).json({ error: 'Recipe not found' }); // Use 404 for 'Not Found'
+            res.status(404).json({ error: 'Recipe not found' });
         }
     } catch (err) {
         console.error("Database error fetching recipe by ID:", err);
         res.status(500).json({ error: 'Server error fetching recipe' });
     }
 });
+
