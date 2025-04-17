@@ -105,3 +105,40 @@ app.post('/api/searchrecipes', async (req, res, next) =>
   res.status(200).json(ret);
 });
 
+app.get('/api/getRecipeByID/:id', async (req, res, next) => {
+    // incoming: id (from URL path parameter)
+    // outgoing: recipe object OR error
+
+    const recipeId = req.params.id;
+    let mongoObjectId;
+
+    // Validate and convert the incoming string ID to a MongoDB ObjectId
+    try {
+        if (!ObjectId.isValid(recipeId)) {
+            return res.status(400).json({ error: 'Invalid Recipe ID format' });
+        }
+        mongoObjectId = new ObjectId(recipeId);
+    } catch (err) {
+        console.error("Error creating ObjectId:", err);
+        return res.status(400).json({ error: 'Invalid Recipe ID format' });
+    }
+
+    const db = client.db(); // Use the default DB configured in the connection string if not specified
+
+    try {
+        console.log(`Attempting to find recipe with _id: ${mongoObjectId}`);
+        // Find the single recipe document matching the ObjectId
+        const recipe = await db.collection('Recipes').findOne({ _id: mongoObjectId });
+
+        if (recipe) {
+            console.log("Recipe found:", recipe.Title);
+            res.status(200).json(recipe); // Send the full recipe object
+        } else {
+            console.log(`Recipe not found for _id: ${mongoObjectId}`);
+            res.status(404).json({ error: 'Recipe not found' }); // Use 404 for 'Not Found'
+        }
+    } catch (err) {
+        console.error("Database error fetching recipe by ID:", err);
+        res.status(500).json({ error: 'Server error fetching recipe' });
+    }
+});

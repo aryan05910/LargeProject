@@ -183,7 +183,7 @@ function App() {
         </header>
         <Routes>
           <Route 
-            path="/" 
+            path="/main" 
             element={
               <main>
                 <SwipePage currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} recipes={recipes} setSavedRecipes={setSavedRecipes} setFavorites={setFavorites} />
