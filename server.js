@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
-const { getRecommendations } = require('./recommendationModel');
 const path = require('path'); // Import the 'path' module
 
 const url = `mongodb+srv://FlavorFindr:WTajjOFaYqBLvyqb@cluster0.ygzkslq.mongodb.net/FlavorFindr?retryWrites=true&w=majority&appName=Cluster0`;
@@ -29,7 +28,7 @@ app.use(bodyParser.json());
 // Serve static files from the 'imgs' directory
 app.use('/api/images', express.static(path.join(__dirname, 'db/data/imgs')));
 
-app.listen(5000, '127.0.0.1'); // start Node + Express server on port 5000
+app.listen(5000, '127.0.0.1'); // start Node + Express server on port 8000
 
 console.log("Listening on port 5000")
 
@@ -156,32 +155,88 @@ app.get('/api/getRecipeByID/:id', async (req, res, next) => {
     }
 });
 
-app.post('/api/getRecommendedRecipes', async (req, res, next) => {
-    // incoming: userId (string/number), favoriteRecipeIds (array of strings)
-    // outgoing: recommendedRecipeIds (array of strings), error (string)
-
-    const { userId, favoriteRecipeIds } = req.body;
-    let error = '';
-    let recommendations = [];
-
-    // Basic input validation
-    if (!userId) {
-        error = 'UserID is required.';
-        return res.status(400).json({ recommendedRecipeIds: [], error: error });
-    }
-    // Ensure favoriteRecipeIds is an array, even if empty or missing
-    const favorites = Array.isArray(favoriteRecipeIds) ? favoriteRecipeIds : [];
-
-    const db = client.db(); // Get database instance
-
+//Gets CleanedIngredients Feature, converts from String to Array
+function extractFeatures(recipe) {
+  let feat = recipe.Cleaned_Ingredients || [];
+  if (typeof feat === 'string') {
     try {
-        // Call the abstracted model function
-        recommendations = await getRecommendations(userId, favorites, db);
-         res.status(200).json({ recommendedRecipeIds: recommendations, error: '' });
-
-    } catch (err) {
-        console.error(`Error getting recommendations for UserID ${userId}:`, err);
-        error = 'Failed to retrieve recommendations.';
-         res.status(500).json({ recommendedRecipeIds: [], error: error });
+      feat = JSON.parse(feat.replace(/'/g, '"'));
+    } catch {
+      feat = feat
+        .slice(1, -1)
+        .split(',')
+        .map(s => s.trim().replace(/^['"]|['"]$/g, ''))
+        .filter(Boolean);
     }
+  }
+  return Array.isArray(feat) ? feat : [];
+}
+
+//Actual Model, Loads recipe and increments User Matching Vector
+app.post("/api/swipe", async (req, res) => {
+  const { userId, recipeId, liked } = req.body;
+  const db = client.db();
+
+  // 1. load recipe
+  const recipe = await db
+    .collection("Recipes")
+    .findOne({ _id: new ObjectId(recipeId) });
+  if (!recipe) return res.status(404).json({ error: "Recipe not found" });
+
+  // 2. build an $inc document
+  const features = extractFeatures(recipe);
+  const incDoc = {};
+  features.forEach((f) => {
+    // +1 on like, -1 on dislike
+    incDoc[`preferences.${f}`] = liked ? 1 : -1;
+  });
+
+  // 3. apply update with upsert
+  await db
+    .collection("user_preferences")
+    .updateOne({ userId }, { $inc: incDoc }, { upsert: true });
+
+  res.json({ success: true });
 });
+
+//Recommend api, takes in rand 200 samples and gets top match as next output
+app.get("/api/recommend", async (req, res) => {
+  const { userId } = req.query;
+  const db = client.db();
+
+  // 1. load or default user prefs
+  const prefDoc = await db.collection("user_preferences").findOne({ userId });
+  const prefs = prefDoc?.preferences || {};
+
+  // 2. sample ~200 recipes
+  const SAMPLE = 200;
+  const candidates = await db
+    .collection("Recipes")
+    .aggregate([{ $sample: { size: SAMPLE } }])
+    .toArray();
+
+  // 3. score & pick best
+  let best = null;
+  let bestScore = -Infinity;
+  for (const r of candidates) {
+    const features = extractFeatures(r);
+    const score = features.reduce((sum, f) => sum + (prefs[f] || 0), 0);
+    if (score > bestScore) {
+      bestScore = score;
+      best = r;
+    }
+  }
+
+  res.json(best);
+});
+
+app.get('/api/preferences', async (req, res) => {
+  const userId = parseInt(req.query.userId, 10);
+  const db = client.db();
+  const prefDoc = await db
+    .collection('user_preferences')
+    .findOne({ userId });
+  // send back the raw preferences object (or {} if none yet)
+  res.json(prefDoc?.preferences || {});
+});
+
